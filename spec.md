@@ -1,0 +1,469 @@
+# Global Collaborative Peer to Peer Finance Ledger
+
+A personal finance management application for tracking transactions between users globally with collaborative approval workflows and multi-currency support, built on a double-entry immutable ledger system.
+
+## Core Features
+
+### Authentication System
+- Phone number-based authentication without OTP verification
+- International country code picker supporting all E.164 formats
+- Login screen prompting users to input their mobile number
+- Searchable country code dropdown without flag icons
+- **Fully functional country code picker with reliable tap, scroll, and selection functionality across mobile and desktop**
+- **Country code picker properly updates selected value in input field and integrates seamlessly with phone number validation**
+- **Consistent touch handling and visual feedback for country selection on all devices with proper onTouchEnd event handling**
+- **Country code list displays with proper scrollable white background and visible click/tap feedback**
+- **Reliable country code selection with immediate visual confirmation of selection and proper state persistence**
+- **Fixed country code picker clickability and responsiveness ensuring full tap area coverage**
+- **Optimized dropdown component with enhanced touch responsiveness and proper state binding for mobile devices**
+- **Enhanced accessibility features for country code picker with proper ARIA labels and keyboard navigation support**
+- **Improved touch target sizes for mobile devices with minimum 44px touch areas for all interactive elements**
+- **Auto-detection of user's country code based on selected currency preference:**
+  - **When user selects a currency (₹, $, €, £, etc.), automatically match and prefill the corresponding country code**
+  - **Currency-to-country mapping logic that sets appropriate country code based on currency selection**
+  - **Seamless integration between currency selection and country code auto-population**
+  - **Smart country code detection that updates immediately when currency preference changes**
+  - **Fallback handling for currencies used in multiple countries with sensible default selection**
+- **Consistent white minimalistic UI styling for both country code picker and currency selection components**
+- **Synchronized country code and currency selection during login and profile setup processes**
+- Mobile number validation according to selected country format and E.164 standards
+- "Continue" button enabled only when both country code and valid phone number are present
+- **Direct login upon valid phone number and country code entry with proper validation and error-free progression to dashboard**
+- **Fixed mobile login flow ensuring successful save and navigation after country code selection and phone number entry**
+- **Smooth login button responsiveness across all mobile devices with proper touch handling and immediate feedback**
+- Loading indicator displayed during login process for smooth user experience
+- Secure phone number storage and session management
+- Session persistence with local storage using useMobileAuth hook
+- Automatic navigation to profiles list upon successful login or session reload
+- Redirect unauthenticated users to mobile login screen
+
+### Navigation Structure
+- Profiles list as the default landing page after login
+- **Clean minimal landing page without subtitle text for streamlined UI**
+- Header with four-button layout: "Hide settled" toggle, central "Dashboard" text label, "Group Travel" button, and "+ Add Person" button
+- Central "Dashboard" text label opens DashboardDrawer component with existing drawer behavior
+- **"Group Travel" button positioned between "Dashboard" and "+ Add Person" in header**
+- Dashboard accessible through central text label in header
+- **Separate "People" page accessible from navigation for viewing and managing all individual profiles outside the dashboard**
+- **"People" page maintains consistency with previous versions and provides dedicated space for profile management**
+- **Smooth transitions between views with consistent styling and reduced layout jitter**
+- Responsive text label in header for dashboard access
+
+### Profile Management
+- Users can create individual profiles for people they transact with
+- Each profile represents a person the user exchanges money with
+- **Profiles can be edited with fully functional Edit Profile dialog that correctly sends updated person name to backend `editPersonProfile` method**
+- **Edit Profile dialog with properly bound input field and Save button working seamlessly on both desktop and mobile**
+- **Person name editing functionality with React Query mutation integration for reliable backend updates**
+- **Immediate refresh of person list after editing to reflect new name dynamically without page reload**
+- Profiles can be deleted
+- Profiles display settlement status when all balances are cleared and approved
+- "Settled Up" toggle filter to hide profiles with zero balance and all approved transactions
+- **Profiles accessible both from dedicated "People" page and integrated dashboard section**
+- **"+ Add Person" button reliably opens CreateProfileDialog component on every tap across all devices with fixed glitch-free functionality**
+- **Add Person modal allows proper text input, validates name field requirements, and successfully saves new profiles without errors**
+- **Person creation immediately updates profile list and closes modal without page reload**
+- **Consistent modal behavior and form validation across mobile and desktop devices with reliable tap handling**
+- **Touch responsiveness optimized for mobile viewports with reliable tap detection and fixed Add Person functionality**
+- **Optimized Add Person flow with fixed input bindings, submission handlers, and reliable backend synchronization**
+
+### Group Travel Transaction Management
+- **Group Travel feature accessible via "Group Travel" button in header**
+- **Create new travel groups with trip names (e.g., "Darjeeling Trip")**
+- **Each group has its own dedicated page showing trip details and member information**
+- **Add multiple members to each group with names and contact information**
+- **Remove or delete group members within each travel group for easy member management**
+- **WhatsApp-style circular profile photo support for each group member with upload and editing capabilities**
+- **Profile photo upload functionality within AddMemberDialog for new members**
+- **Edit member details including name and profile photo directly within GroupDetailView**
+- **Member profile photos displayed as circular avatars throughout group interfaces**
+- **Member contribution tracking for individual expenses during the trip**
+- **Expense entry system allowing each member to log what they paid**
+- **Edit functionality for group travel expenses enabling updates to amount, description, or currency of each expense**
+- **Equal distribution calculation logic across all group members**
+- **"Calculate Balance" functionality that computes equal splits and determines who owes whom**
+- **Settlement summary displaying clear, readable results with visual indicators:**
+  - **Green indicators for positive balances (money to receive)**
+  - **Red indicators for negative balances (money to pay)**
+  - **Clear amounts showing exact settlement required between members**
+- **Save and export functionality for final settlement results**
+- **Group management with ability to edit group details and member list**
+- **Trip expense history and transaction logs within each group**
+- **Global white minimal design consistent with existing app aesthetic**
+- **Dynamic currency symbol display in Group Travel components based on user's currency preference**
+
+### Currency Management
+- Global currency preference setting for user's preferred currency (₹, $, €, etc.)
+- **All amounts stored using ISO 4217 currency codes for standardization**
+- All amounts formatted based on user's locale and currency preference
+- **Enhanced CurrencyIcon component that dynamically displays currency symbol based on selected currency code:**
+  - **Renders correct symbol (₹, $, €, £, etc.) based on user's current currency preference**
+  - **Currency symbols appear consistently across all pages: Dashboard, People Page, Group Travel, Summary Cards, Expenses, and Profile views**
+  - **All monetary values (totals, transactions, expenses) display correct symbol and update immediately when user changes currency setting**
+  - **Currency preference changes propagate instantly to all components without requiring page refresh**
+  - **Backend stores and retrieves user's currency preference for consistent symbol display**
+  - **Real-time global currency updates through user preferences stored in settings**
+  - **Currency formatting in SummaryCards, PendingTransactions, PortfolioAnalytics, TransactionList, ProfileView, and Group Travel components uses latest selected currency icon**
+- Currency dropdown in transaction forms
+- **Currency conversion utility function for dashboard totals using mock exchange rate service**
+- **getConvertedBalance function to convert balances to target currency for display**
+- CurrencySettingsDialog component with reliable dropdown functionality:
+  - Dropdown opens consistently and remains visible on tap
+  - White background styling for consistency
+  - Clear scrollable behavior with larger touch targets for mobile
+  - Proper alignment with other form fields
+- **Currency-to-country code mapping system that automatically updates country code when currency is selected**
+- **Intelligent country code detection based on currency preference with fallback handling for multi-country currencies**
+
+### Double-Entry Immutable Ledger System
+- **Atomic transaction recording with dual-entry journal system**
+- **Every transaction automatically generates two immutable entries: Debit (for lender) and Credit (for borrower)**
+- **Each ledger entry references its counterpart for audit consistency and verification**
+- **Immutable ledger entries that cannot be modified once created**
+- **Role-based perspective reversal: "Lent" entries appear as "Owed" for counterparty**
+- **Mirrored ledger consistency maintained between both user profiles**
+- **Person-level isolation ensuring individual balances remain independent per contact**
+- **Double-entry ledger system informational text hidden from all user-facing views including ProfileView and TransactionList components**
+- **Self-referencing transactions supported for personal notes without requiring counterparty principal ID**
+- **Automatic self-referencing counterparty assignment for single-user transactions to maintain ledger consistency**
+
+### Transaction Management with Handshake Protocol
+- **All new transactions marked as "Pending" by default requiring counterparty approval**
+- **Handshake protocol where counterparty can approve or reject transactions**
+- **Only transactions marked "Approved" appear in dashboards, balances, and totals**
+- **Rejection handling prevents updates of rejected transaction records**
+- **Self-recorded transactions without counterparty automatically approved and included in dashboard summaries**
+- **Critical Balance Calculation Rules with Strict Accuracy:**
+  - **Total Debit = Sum of all ledger entries where type == #debit AND status == #approved AND status != #archived**
+  - **Total Credit = Sum of all ledger entries where type == #credit AND status == #approved AND status != #archived**
+  - **I Owe Total = Sum of all ledger entries where type == #credit AND status == #approved AND status != #archived (from user's perspective)**
+  - **Remaining Due = (Sum of Approved Active Debits) - (Sum of Approved Active Credits)**
+  - **Transactions with status == #pending, #rejected, or #archived are fully excluded from all balance calculations**
+  - **Per-person calculation isolation ensuring one person's transactions do not affect another's totals**
+- Transaction types: lent, repaid, owed (I owe), or adjusted
+- **New "I Owe" transaction type (#owed) represents amounts the user owes someone else**
+- **"I Owe" transactions excluded from Remaining Due calculation but displayed separately in summaries**
+- Each transaction includes amount, date, currency, type, and optional description
+- Visual status indicators: yellow clock for pending, green checkmark for approved
+- **"Pending Approval" label displayed visibly next to any unapproved repayments in transaction lists**
+- **"Mark as Repaid" functionality for existing transactions:**
+  - **Backend mutation `markTransactionAsRepaid(personId: Nat, transactionId: Nat)` that converts transaction type to #credit (Repaid) and sets status to #archived instead of deleting**
+  - **TransactionList component includes "Mark as Repaid" button for un-repaid transactions**
+  - **"Mark as Repaid" button only appears for transactions that are not already repaid**
+  - **After marking as repaid, transaction is archived and excluded from active balance calculations**
+  - **Only approved active repayments modify dashboard totals and balance calculations**
+- Users can edit or delete transactions
+- **Transaction deletion sets status to #archived instead of permanent removal**
+- Date picker for transaction entry
+- **Transaction type selector includes "I Owe" option alongside lend, repay, and adjusted**
+- **Add Transaction page UI refined with consistent layout alignment and proper input focus:**
+  - **Centered and properly sized input fields for amount, description, and date with optimal readability and proportional spacing**
+  - **Refined currency dropdown with smooth white minimal popup and larger touch-friendly selection list**
+  - **Transaction type selector (lend, repay, I owe, adjusted) displayed in modern button-group style with rounded edges and active state highlights**
+  - **Improved layout for mobile responsiveness preventing overflow and ensuring proper spacing**
+  - **Submit button clearly visible and consistent with global white WhatsApp-inspired theme featuring rounded corners, shadow, and soft accent color**
+  - **Responsive sizing and clean integration with global white minimal design standards**
+  - **Currency symbol display in transaction forms based on user's currency preference**
+- **Edit Transaction page UI fixed with global white minimalistic interface:**
+  - **Properly aligned input fields with consistent spacing matching global design standards**
+  - **Balanced spacing and modern typography throughout the form**
+  - **Currency selection dropdown with white background and smooth interaction**
+  - **Date picker design consistent with global UI style and mobile-friendly**
+  - **Form fields properly sized and aligned for both desktop and mobile devices**
+  - **Save and cancel buttons styled consistently with app's accent colors and rounded design**
+  - **Centralized action buttons with proper spacing and responsive mobile layout**
+  - **Smooth transitions and consistent white minimalistic theme throughout**
+  - **Enhanced touch responsiveness for all interactive elements**
+  - **Currency symbol display in edit forms based on user's currency preference**
+- **Delete Transaction confirmation dialog UI fixed:**
+  - **Consistent rounded borders matching global design language**
+  - **Clear typography hierarchy with proper spacing and readability**
+  - **Responsive layout ensuring proper display across all device sizes**
+  - **Accent-colored confirm and cancel buttons matching app design**
+  - **Modern dialog styling with white background and subtle shadows**
+  - **Proper spacing and alignment with visually balanced confirmation dialog**
+  - **Clear warning text with consistent rounded corner styling**
+  - **Accessible confirmation layout with responsive action buttons**
+
+### Transaction History Management
+- **All transactions preserved as historical records even after being marked as paid or deleted**
+- **Transactions marked as paid or deleted receive #archived status instead of permanent removal**
+- **Backend endpoint `getTransactionHistory(personId: Nat) : async [LedgerEntry]` returns all historical transactions regardless of status**
+- **History section in each person's profile displaying all archived transactions**
+- **History view shows date, status, amount, and transaction type for all archived entries**
+- **Clean minimalistic styling for History section consistent with global design**
+- **History toggle or section accessible within each person's profile**
+- **Archived transactions excluded from active balance calculations but visible in History**
+- **Mark as Paid and Delete buttons change transaction status to #archived without data loss**
+
+### Collaborative Chat Interface
+- Chat interface within each profile
+- Send text messages between users
+- Link/attach specific transactions to chat messages
+- Chat bubbles with proper alignment and timestamps
+- Message status indicators (sent/received/seen)
+- Transaction references integrated into chat feed
+- Messages appear from both user and counterparty perspectives
+
+### Balance Calculation with Ledger-Based Sums
+- **Balance calculations utilize ledger-based sums using only approved active entries**
+- **Repayments matched individually to corresponding outstanding transactions chronologically**
+- Each repayment reduces specific lent or owed transaction it corresponds to
+- **Strict Balance Calculation Formula: Remaining Due = (Sum of Approved Active Debits) - (Sum of Approved Active Credits)**
+- **Absolute exclusion of pending, rejected, and archived transactions from all balance calculations**
+- **Self-recorded transactions included in balance calculations when approved and active**
+- Balance breakdown showing:
+  - Total Debit to this person (approved active debits only)
+  - Total Credit by this person (approved active credits only)
+  - **I Owe Total to this person (approved active credits from user's perspective only)**
+  - **Remaining Due amount (positive if they owe user, negative if user owes them) calculated from approved active ledger entries only**
+
+### Advanced Portfolio Analytics
+- **BlackRock-style portfolio analytics with sophisticated financial calculations:**
+  - **Weighted total exposure across all approved active ledger entries only**
+  - **Realized returns from completed transaction cycles**
+  - **Unrealized gains/losses on outstanding balances**
+  - **Remaining Due calculations with risk-adjusted return metrics based on approved active transactions**
+- **Dashboard displays calculated metrics with visual representations:**
+  - **Line graphs showing cash flow trends over time**
+  - **Progress bars indicating portfolio growth metrics**
+  - **Risk-adjusted return visualization similar to BlackRock's analytics**
+  - **Weighted exposure calculations across all profiles and currencies**
+- **Advanced computation logic for financial portfolio tracking using corrected balance calculations**
+- **Minimalistic UI presentation of complex financial analytics**
+
+### Dashboard with Menu Access and Integrated Sections
+- Dashboard accessible through central "Dashboard" text label in header
+- Displayed as DashboardDrawer component with existing drawer behavior
+- **Fixed dashboard layout with proper card sizing, typography, and spacing matching global white minimal design**
+- **Responsive layout ensuring consistent proportions across mobile and desktop devices**
+- Modern typography with smooth fade-in animations
+- Improved alignment for summary and "Action Required" sections
+- "Action Required" section for pending transaction approvals
+- Notifications for transactions awaiting user's approval
+- Clear indicators for items requiring attention
+- **Aggregate view showing totals across all profiles (approved active ledger entries only)**
+- Overall statistics:
+  - **Total Debit across all relationships (approved active debit entries only)**
+  - **Total Credit to user (approved active credit entries only)**
+  - **I Owe Total across all relationships (approved active credit entries from user's perspective only)**
+  - **Remaining Due across all relationships (calculated from approved active debits minus approved active credits only)**
+- Count of settled profiles
+- Pending approvals summary
+- **Advanced portfolio analytics display with BlackRock-style metrics and visualizations using corrected ledger-based logic**
+- **Dashboard cards display totals using strict approved active ledger entry filtering with separate I Owe totals**
+- **Integrated "People" section within dashboard displaying ProfileList component for direct contact management**
+- **People section shows all existing person profiles correctly after migration with proper data synchronization**
+- **Integrated "Analytics" section within dashboard displaying PortfolioAnalytics component with advanced financial calculations and chart views**
+- **BlackRock-style analytics option available in dashboard drawer for financial summaries, returns, and performance metrics**
+- **Dashboard layout automatically rebalances to accommodate both People and Analytics sections with proper spacing and hierarchy**
+- **Clean global white minimal UI styling maintained across all integrated sections for design consistency**
+- **Smooth navigation between dashboard sections with responsive layout across all devices**
+- **"Reset Dashboard" feature accessible from dashboard settings:**
+  - **Clears all ledger entries, profiles, and analytics data**
+  - **Resets all overview totals and balances to zero**
+  - **Allows users to start fresh with new people and transactions**
+  - **Preserves user authentication and settings (phone number, currency preference)**
+  - **Confirmation dialog before executing reset operation**
+  - **Safe reset operation that maintains user session and preferences**
+- **Currency symbol display throughout dashboard components based on user's currency preference**
+
+### Settings Page
+- Global white minimalist design with clean layout
+- Card-style sections for visual organization with consistent rounded corners
+- Fields for phone, country code, name, and currency preference
+- Modern typography and balanced spacing
+- Mobile number field is user-editable with proper focus and input validation
+- Save confirmation upon mobile number update
+- **Synchronized currency and country code selection with auto-detection functionality**
+
+### Add Person Page
+- Simplified and modernized input and buttons
+- Full-width white form with soft borders and rounded corners
+- Neutral button tones consistent with global app design
+- Clean minimalist layout matching overall app aesthetic
+
+### User Interface
+- Global UI style with modern design patterns and adaptive layout
+- Base white minimalistic theme (#ffffff) with subtle gradients for depth
+- International typography using Inter or Roboto fonts for worldwide usability
+- Consistent spacing and localization-friendly layout for all text and currency displays
+- Neutral globally accepted color palette with blue-gray and emerald highlights
+- Flat UI style with smooth micro-animations and accessible contrast ratios
+- Visual balance indicators:
+  - Emerald green for money owed to user (positive balance)
+  - Blue-gray for money user owes (negative balance)
+  - Neutral amber for pending transactions
+- Transaction status visual indicators (pending/approved)
+- **"Pending Approval" labels clearly visible next to unapproved repayments in transaction lists**
+- **"Mark as Repaid" buttons styled consistently with global white minimal design**
+- Enhanced typography and spacing for global readiness
+- **Responsive design ensuring consistent rendering and interactions across mobile and desktop with verified login form, country selection, and Add Person modal functionality**
+- **Optimized touch responsiveness across mobile viewports for all interactive elements with proper state persistence**
+- **Overall frontend optimization with smooth transitions, reduced layout jitter, and enhanced mobile UX**
+- Four-button header layout with consistent sizing and hover effects:
+  - "Hide settled" toggle on the left
+  - Central "Dashboard" text label
+  - "Group Travel" button in the middle
+  - "+ Add Person" button on the right
+- Smooth transitions between profiles list and dashboard drawer
+- Intuitive navigation between profiles and dashboard
+- All content displayed in English
+- Consistent flat design for forms, dialogs, and buttons
+- Smooth micro-animations for user interactions
+- WhatsApp-inspired minimalistic aesthetic with proper spacing and alignment
+- Card-style sections with rounded corners for visual organization
+- Clean white backgrounds with balanced spacing throughout all pages
+- **Reliable touch handling and interaction feedback for all interactive elements with tested and verified functionality**
+- **Minimalistic global UI consistency maintained across all upgraded computation and migration views**
+- **All buttons, modals, and transitions work flawlessly on both mobile and desktop views**
+- **Edit Profile dialog maintains current global minimalistic design with smooth UI transitions**
+- **History section styled with clean minimalistic design consistent with global white theme**
+- **History toggle and archived transaction display with proper spacing and typography**
+- **All "Net Balance" text occurrences replaced with "Remaining Due" label across dashboard, profile pages, and analytics components**
+- **WhatsApp-style circular profile photo avatars for group members with clean minimal styling**
+- **Enhanced CurrencyIcon component with currency symbol display integrated throughout all UI components with proper alignment and sizing based on user's currency preference**
+- **Currency symbols automatically displayed based on user's currency preference across all pages and screens with immediate updates when preference changes**
+- **Clean and minimal layout maintained with currency icons properly integrated without disrupting existing design**
+- **Group Travel UI components maintain global minimalistic theme for member management, expense editing, and group pages with correct currency symbols**
+- **Separate "People" page maintains consistency with global white minimal design and previous UI versions with proper currency symbol display**
+- **People page and Dashboard page restored to previous layout without search bars or filters**
+- **Clean global white minimalistic look maintained with consistent spacing and typography after removing search functionality**
+- **All page elements (buttons, titles, and lists) properly aligned after restoring previous layout**
+- **No leftover search-related components or logic affecting performance or layout across pages**
+- **Enhanced accessibility features throughout the application with proper ARIA labels, keyboard navigation, and screen reader support**
+- **Improved touch target sizes for mobile devices with minimum 44px touch areas for all interactive elements**
+- **Consistent white minimalistic UI styling maintained across country code picker and currency selection components**
+- **All country flag icons removed from every component throughout the application**
+- **Only currency symbols (₹, $, €, £, etc.) displayed without flag icons in all UI components**
+- **Clean minimalistic appearance maintained after flag icon removal with proper alignment and spacing**
+- **Currency auto-detection and symbol updates remain fully functional without flag icons**
+
+## Data Storage
+
+### Backend Data
+- User authentication data with phone numbers and verification status
+- Session tokens for authenticated users with proper validation and storage
+- User profiles with names, metadata, settlement status, country code, and currency preference
+- **editPersonProfile backend method properly handles person name updates and returns updated profile data**
+- **Backend stores user's currency preference and provides it to frontend for consistent symbol display**
+- **Currency preference retrieval endpoint for frontend CurrencyIcon component**
+- **Currency-to-country code mapping data for auto-detection functionality**
+- **Backend method to retrieve appropriate country code based on selected currency**
+- **Fallback country code handling for currencies used in multiple countries**
+- **Group travel data storage:**
+  - **Travel groups with trip names, creation dates, and member lists**
+  - **Group member information with names, contact details, and profile photos**
+  - **Member profile photo storage and retrieval functionality**
+  - **Editable member details (name and profile photo) persisted in backend under each TravelGroup's member record**
+  - **Backend functionality to remove or delete group members from travel groups**
+  - **Individual expense entries for each member within groups**
+  - **Backend functionality to edit group travel expenses including amount, description, and currency updates**
+  - **Expense calculation results and settlement summaries**
+  - **Group transaction history and balance calculations**
+- **Double-entry immutable ledger system with atomic transaction recording**
+- **Ledger entries with debit/credit types, amounts, dates, currency codes (ISO 4217), descriptions, and approval status**
+- **Transaction status enum including #pending, #approved, #rejected, and #archived**
+- **Each ledger entry references its counterpart for audit consistency**
+- **Transaction approval/rejection records with handshake protocol implementation**
+- **Transaction type enum including #lent, #repaid, #owed (I owe), and #adjusted**
+- **addLedgerEntry function conditionally skips registered user validation when counterparty is null or empty**
+- **Self-referencing counterparty assignment for single-user transactions to maintain ledger consistency**
+- **markTransactionAsRepaid backend mutation that converts transaction type to #credit and sets status to #archived**
+- **getTransactionHistory backend endpoint returning all ledger entries regardless of status for specified person**
+- **Transaction deletion sets status to #archived instead of permanent removal**
+- Chat messages with timestamps, sender information, and transaction links
+- Currency preferences and user locale settings
+- Individual transaction matching records for repayment tracking
+- Session management for authenticated users with proper login flow handling
+- **Backend balance calculation logic with strict ledger-based accuracy:**
+  - **Total Debit = Sum of ledger entries where type == #debit AND status == #approved AND status != #archived**
+  - **Total Credit = Sum of ledger entries where type == #credit AND status == #approved AND status != #archived**
+  - **I Owe Total = Sum of ledger entries where type == #credit AND status == #approved AND status != #archived (from user's perspective)**
+  - **Remaining Due = (Sum of Approved Active Debits) - (Sum of Approved Active Credits)**
+  - **Complete exclusion of pending, rejected, and archived ledger entries from all active calculations**
+  - **Self-recorded transactions included in calculations when approved and active**
+- **getSummaryDashboard and getProfileBalance query responses return corrected calculations with separate I Owe totals excluding archived entries**
+- **Per-person balance calculation isolation preventing cross-contamination between profiles**
+- **Currency conversion utility function getConvertedBalance for multi-currency support**
+- **Mock exchange rate service integration for currency conversion**
+- **Robust data migration system with proper schema versioning:**
+  - **Improved migration.mo module with comprehensive data migration logic**
+  - **migrate function that imports from migrationHelper.mo and iterates through all existing data structures (UserProfile, PersonProfile, LedgerEntry, Message, GroupTravel)**
+  - **Initialization of all Map structures (profiles, ledgers, messages, groups) for each legacy user**
+  - **Migration of all person profiles, transactions, and messages into double-entry ledger system maintaining original IDs and timestamps**
+  - **Reconstruction of travel group records including members, expenses, and settlements for full continuity**
+  - **Type compatibility enforcement between previous and current Motoko record definitions with appropriate transformers**
+  - **Idempotent migration logic - re-running does not duplicate data**
+  - **Debug logging for key migration steps (e.g., "Migrated 12 users", "Migrated 45 profiles")**
+  - **Public shared func migrateAll() callable only by admin to perform complete migration**
+  - **Strict error handling to skip invalid entries rather than trap**
+  - **Preservation of currency codes and user preferences across migrations**
+  - **Migration updates existing stored maps with converted data**
+- **Reset dashboard functionality:**
+  - **Backend method to clear all ledger entries and profiles for authenticated user**
+  - **Preserves user authentication data and settings (phone number, currency preference)**
+  - **Safe reset operation that maintains user session while clearing transactional data**
+  - **Resets all calculated totals and analytics to zero state**
+
+### Frontend State
+- Authentication state and session persistence using useMobileAuth hook
+- Current view state and navigation with profiles list as default landing page
+- Dashboard drawer state for central text label access
+- **Separate "People" page navigation state for dedicated profile management outside dashboard**
+- **Group travel state management:**
+  - **Current group selection and group page navigation**
+  - **Group creation and editing form states**
+  - **Member management state for adding and editing group members**
+  - **Member removal state management for deleting group members**
+  - **Member profile photo upload and editing state management**
+  - **WhatsApp-style circular avatar display state for group members**
+  - **Expense entry form states for individual member contributions**
+  - **Expense editing state management for updating amount, description, and currency**
+  - **Balance calculation results and settlement summary display state**
+  - **Group travel navigation state and page transitions**
+- Form inputs and temporary UI state including login loading states
+- **Edit Profile dialog state with properly bound input field for person name editing**
+- **React Query mutation state for editPersonProfile backend integration with error handling**
+- **Person list refresh state to immediately reflect updated names after editing**
+- **Real-time balance calculations using corrected ledger-based backend logic with strict approved active entry filtering**
+- **markTransactionAsRepaid mutation state and loading indicators**
+- **TransactionList component state for "Mark as Repaid" button visibility and functionality**
+- **Transaction History state management for displaying archived transactions**
+- **History section toggle state within each person's profile**
+- **getTransactionHistory query state for fetching all historical transactions**
+- Chat interface state and message display
+- Currency formatting and locale display preferences
+- **Enhanced CurrencyIcon component state management for displaying currency symbols throughout the application based on user's currency preference**
+- **Dynamic currency symbol state that updates immediately when user changes currency preference in settings**
+- **CurrencyIcon component state management for detecting and rendering correct symbols (₹, $, €, £, etc.)**
+- **Currency preference propagation state ensuring all components receive updated currency setting without page refresh**
+- **Global currency updates through user preferences stored in settings with real-time propagation to all components**
+- **Currency formatting state in SummaryCards, PendingTransactions, PortfolioAnalytics, TransactionList, ProfileView, and Group Travel components using latest selected currency icon**
+- Filter states (settled up toggle)
+- **Phone number validation and login flow state with E.164 compliance and fixed progression to dashboard**
+- Loading indicators for authentication processes
+- Header button states and dashboard drawer transitions
+- **Country code picker state and selection handling with reliable touch responsiveness and fixed clickability**
+- **Enhanced country code picker state management with improved accessibility and touch target optimization**
+- **Currency-to-country code auto-detection state management for seamless integration during login and profile setup**
+- **Synchronized country code and currency selection state with automatic updates when currency preference changes**
+- **Country code picker accessibility state with proper ARIA labels and keyboard navigation support**
+- **Add Person modal state and form validation with optimized mobile interaction and glitch-free functionality**
+- **Enhanced state management for smooth transitions and reduced layout jitter across all components**
+- **Portfolio analytics state for BlackRock-style calculations using corrected approved active-only ledger logic**
+- **Advanced computation state for weighted exposure and risk-adjusted return metrics with updated filtering**
+- **Frontend components display corrected ledger-based balance calculations with separate I Owe totals and visible "Pending Approval" labels**
+- **Transaction type selector state including "I Owe" option in creation and editing forms**
+- **Currency conversion state for multi-currency balance display**
+- **Dashboard section state management for integrated People and Analytics components**
+- **ProfileList component state within dashboard for direct contact management with proper data synchronization after migration**
+- **PortfolioAnalytics component state within dashboard for advanced financial visualization with BlackRock-style analytics**
+- **Reset dashboard confirmation state and loading indicators**
+- **Post-reset state management to refresh all components and display zero totals**
+- **SummaryCards and DashboardDrawer component state for proper fetching, calculating, and updating of Total Debit, Total Credit, and Remaining Due values**
+- **Dynamic synchronization state for PortfolioAnalytics and ProfileView components with corrected ledger summary**
+- **Real-time update state management for balance calculations after marking transactions as repaid or approved**
+- **Separate "People" page state management for profile viewing and management outside dashboard context**
+- **UI state management for flag icon removal across all components with maintained alignment and spacing**
+- **Currency symbol display state without flag icons throughout the application**

@@ -1,0 +1,1 @@
+import React from "react";export default function AuditLogPage(){return(<div className="p-8 text-slate-800"><h2 className="text-2xl font-bold">Audit Logs</h2><p className="mt-2 text-slate-500">Immutable ledger history and synchronization logs.</p></div>);}

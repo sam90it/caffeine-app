@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "caffeine-frontend-temp-backend": {
+      "main": "src/caffeine-frontend-temp-backend/main.mo",
+      "type": "motoko"
+    },
+    "caffeine-frontend-temp-frontend": {
+      "dependencies": [
+        "caffeine-frontend-temp-backend"
+      ],
+      "source": [
+        "src/caffeine-frontend-temp-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "caffeine-frontend-temp-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

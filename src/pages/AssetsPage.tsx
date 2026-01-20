@@ -1,0 +1,1 @@
+import React from "react";export default function AssetsPage(){return(<div className="p-8 text-slate-800"><h2 className="text-2xl font-bold">Asset Inventory</h2><p className="mt-2 text-slate-500">Global asset distribution and custody tracking.</p></div>);}

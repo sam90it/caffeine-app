@@ -1,0 +1,27 @@
+type LedgerStatus = 
+ variant {
+   approved;
+   archived;
+   pending;
+   rejected;
+ };
+type LedgerEntry = 
+ record {
+   amount: int;
+   counterpart: text;
+   description: text;
+   id: int;
+   status: LedgerStatus;
+ };
+type BalanceSummary = 
+ record {
+   remainingDue: int;
+   totalLent: int;
+   totalOwed: int;
+   totalRepaid: int;
+ };
+service : {
+  addEntry: (entry: LedgerEntry) -> (bool);
+  getSummaryDashboard: () -> (BalanceSummary) query;
+  resetDashboard: () -> ();
+}
